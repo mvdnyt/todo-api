@@ -14,6 +14,7 @@ tasks = [
 
 @app.get("/")
 def root():
+    "Tells you about the Main API"
     return {
         "name": "Task API",
         "version": "1.0",
@@ -21,14 +22,17 @@ def root():
     }
 @app.get("/health")
 def health():
+    "Checks if the server is currently running"
     return {"status": "ok"}
 
 @app.get("/tasks")
 def get_tasks():
+    "Return all tasks "
     return tasks
 
 @app.get("/tasks/{task_id}")
 def get_task(task_id: int):
+    "Return a single task by id or return 404 error if it doesn't exist"
     for task in tasks:
         if task["id"] == task_id:
             return task
@@ -40,6 +44,7 @@ class TaskCreate(BaseModel):
           
 @app.post("/tasks", status_code=201)
 def create_task(task: TaskCreate):
+    "Create a new task from title and add it to the list"
     if task.title.strip() == "":
         raise HTTPException(status_code=400, detail="title is required")
     ids = [t["id"] for t in tasks]
@@ -54,6 +59,7 @@ class TaskUpdate(BaseModel):
 
 @app.put("/tasks/{task_id}")
 def put_task(task_id:int, task: TaskUpdate):
+    "Update a tasks title and/or done status"
     if task.title is not None and task.title.strip() == "":
         raise HTTPException(status_code=400, detail="title is required")
     for t in tasks:
@@ -67,6 +73,7 @@ def put_task(task_id:int, task: TaskUpdate):
 
 @app.delete("/tasks/{task_id}", status_code=204)
 def delete_task(task_id:int ):
+    "Delete a task by id"
     for t in tasks:
         if t["id"] == task_id:
             tasks.remove(t)
