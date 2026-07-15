@@ -7,7 +7,7 @@ app=FastAPI()
 
 tasks = [
     {"id": 1, "title": "Buy milk", "done": False},
-    {"id": 2, "title": "Feed the car", "done": True},
+    {"id": 2, "title": "Feed the cat", "done": True},
     {"id": 3, "title": "Write code", "done": False}
 
 ]
@@ -47,4 +47,28 @@ def create_task(task: TaskCreate):
     new_task = {"id":new_id,"title":task.title,"done":False}
     tasks.append(new_task)
     return (new_task)
-   
+
+class TaskUpdate(BaseModel):
+    title: str | None=None
+    done: bool | None=None 
+
+@app.put("/tasks/{task_id}")
+def put_task(task_id:int, task: TaskUpdate):
+    if task.title is not None and task.title.strip() == "":
+        raise HTTPException(status_code=400, detail="title is required")
+    for t in tasks:
+       if t["id"]==task_id: 
+        if task.title is not None:
+            t["title"] = task.title
+        if task.done is not None:
+            t["done"] = task.done
+        return t    
+    raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
+
+@app.delete("/tasks/{task_id}", status_code=204)
+def delete_task(task_id:int ):
+    for t in tasks:
+        if t["id"] == task_id:
+            tasks.remove(t)
+            return None
+    raise HTTPException(status_code=404, detail=f"Task {task_id} not found")       
