@@ -4,14 +4,14 @@ This is a CRUD based application that allows one to do GET, POST, PUT and DELETE
 
 ## How to run it
 
-\`\`\`bash
+```bash
 git clone https://github.com/mvdnyt/todo-api.git
 cd todo-api
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
-\`\`\`
+```
 
 Then visit http://localhost:8000/docs for interactive Swagger UI.
 
@@ -29,7 +29,7 @@ Then visit http://localhost:8000/docs for interactive Swagger UI.
 
 ## Example request
 
-\`\`\`
+```bash
 HTTP/1.1 200 OK
 date: Wed, 15 Jul 2026 08:16:46 GMT
 server: uvicorn
@@ -37,7 +37,7 @@ content-length: 39
 content-type: application/json
 
 {"id":1,"title":"Buy milk","done":true}
-\`\`\`
+```
 
 ## Swagger UI
 
